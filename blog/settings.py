@@ -11,7 +11,7 @@ SECRET_KEY = Config.SECRET_KEY
 
 DEBUG = Config.DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = Config.ALLOWED_HOSTS
 
 
 INSTALLED_APPS = [
@@ -21,6 +21,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "api",
 ]
 
 MIDDLEWARE = [
