@@ -11,3 +11,5 @@ class Config:
     DB_PASSWORD = os.environ.get("DB_PASS", "blogger")
     DB_HOST = os.environ.get("DB_HOST", "localhost")
     DB_PORT = os.environ.get("DB_PORT", 3306)
+
+    JWT_SECRET = os.environ.get("JWT_SECRET", "abcd")
