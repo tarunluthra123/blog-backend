@@ -6,9 +6,11 @@ from api.models import User
 from api.serializers import UserSerializer, ProfileSerializer
 from utils.codec import Codec
 from utils.jwt import generate_token
+from api.permissions import IsAuthenticated
 
 
 class PingPongView(APIView):
+    permission_classes = (IsAuthenticated,)
     def get(self, request):
         return Response({"message": "pingpong"})
 
