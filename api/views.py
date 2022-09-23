@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.pagination import PageNumberPagination
 
-from api.models import User
-from api.serializers import UserSerializer, ProfileSerializer
+from api.models import User, Article
+from api.serializers import ArticleSerializer, UserSerializer, ProfileSerializer
 from utils.codec import Codec
 from utils.jwt import generate_token
 from api.permissions import IsAuthenticated
@@ -52,3 +53,27 @@ class LoginView(APIView):
             return Response({"token": token, **serializer.data})
 
         return Response({"message": "Invalid credentials"}, status=401)
+
+
+class ArticlePagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = "size"
+
+
+class ArticleListView(ListAPIView):
+    serializer_class = ArticleSerializer
+    pagination_class = ArticlePagination
+
+    def get_queryset(self):
+        query_params = self.request.query_params
+
+        author = query_params.get("author")
+        tag = query_params.get("tag")
+
+        if author:
+            return Article.objects.filter(author__username=author)
+
+        if tag:
+            return Article.objects.filter(tags__name=tag)
+
+        return Article.objects.all()
