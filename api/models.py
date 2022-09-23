@@ -18,3 +18,28 @@ class User(models.Model):
     def save(self, *args, **kwargs):
         self.password = Codec.encode(self.password)
         super().save(*args, **kwargs)
+
+
+class Article(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
+    subtitle = models.CharField(max_length=400, blank=True)
+    body = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.slug
+
+
+class ArticleTag(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    article = models.ManyToManyField(Article, related_name="tags")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
