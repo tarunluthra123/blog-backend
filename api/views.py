@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView
 from rest_framework.pagination import PageNumberPagination
 
-from api.models import User, Article
+from api.models import User, Article, ArticleTag
 from api.serializers import ArticleSerializer, UserSerializer, ProfileSerializer
 from utils.codec import Codec
 from utils.jwt import generate_token
@@ -60,7 +60,7 @@ class ArticlePagination(PageNumberPagination):
     page_size_query_param = "size"
 
 
-class ArticleListView(ListAPIView):
+class ArticleCreateListView(ListCreateAPIView):
     serializer_class = ArticleSerializer
     pagination_class = ArticlePagination
 
@@ -77,3 +77,21 @@ class ArticleListView(ListAPIView):
             return Article.objects.filter(tags__name=tag)
 
         return Article.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        author = request.user
+        tags = data.pop("tags")
+
+        article = Article.objects.create(author=author, **data)
+
+        tag_objects = []
+        for tag in tags:
+            t = ArticleTag.objects.get_or_create(name=tag)[0]
+            tag_objects.append(t)
+
+        article.tags.set(tag_objects)
+
+        serializer = ArticleSerializer(article)
+
+        return Response(serializer.data, status=201)
