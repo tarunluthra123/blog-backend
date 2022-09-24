@@ -7,7 +7,7 @@ from api.models import User, Article, ArticleTag
 from api.serializers import ArticleSerializer, UserSerializer, ProfileSerializer
 from utils.codec import Codec
 from utils.jwt import generate_token
-from api.permissions import IsAuthenticated
+from api.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 class PingPongView(APIView):
@@ -63,6 +63,7 @@ class ArticlePagination(PageNumberPagination):
 class ArticleCreateListView(ListCreateAPIView):
     serializer_class = ArticleSerializer
     pagination_class = ArticlePagination
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_queryset(self):
         query_params = self.request.query_params
@@ -101,6 +102,7 @@ class ArticleRetrieveUpdate(RetrieveUpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     lookup_field = "slug"
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def patch(self, request, *args, **kwargs):
         user = request.user
