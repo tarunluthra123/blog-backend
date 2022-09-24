@@ -114,10 +114,31 @@ class ArticleRetrieveUpdate(RetrieveUpdateAPIView):
         return Response({"message": "You are not authorized to edit this article"}, status=401)
 
 
-class CommentListView(ListAPIView):
+class CommentListCreateView(ListCreateAPIView):
     serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get_queryset(self, *args, **kwargs):
         slug = self.kwargs.get("slug")
         comments = Comment.objects.filter(article__slug=slug)
         return comments
+
+    
+    def post(self, request, *args, **kwargs):
+        slug = kwargs.get("slug")
+        try:
+            article = Article.objects.get(slug=slug)
+        except Article.DoesNotExist:
+            return Response({"message": "Incorrect slug. Article not found."}, status=400)
+
+        data = request.data
+
+        comment = Comment.objects.create(
+            article=article,
+            commenter=request.user,
+            **data,
+        )
+
+        serializer = self.serializer_class(comment)
+
+        return Response(serializer.data, status=201)
