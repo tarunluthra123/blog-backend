@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework.pagination import PageNumberPagination
 
-from api.models import User, Article, ArticleTag
-from api.serializers import ArticleSerializer, UserSerializer, ProfileSerializer
+from api.models import User, Article, ArticleTag, Comment
+from api.serializers import ArticleSerializer, UserSerializer, ProfileSerializer, CommentSerializer
 from utils.codec import Codec
 from utils.jwt import generate_token
 from api.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -112,3 +112,12 @@ class ArticleRetrieveUpdate(RetrieveUpdateAPIView):
             return super().patch(request, *args, **kwargs)
 
         return Response({"message": "You are not authorized to edit this article"}, status=401)
+
+
+class CommentListView(ListAPIView):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        slug = self.kwargs.get("slug")
+        comments = Comment.objects.filter(article__slug=slug)
+        return comments
