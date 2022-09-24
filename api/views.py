@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework.pagination import PageNumberPagination
 
 from api.models import User, Article, ArticleTag
@@ -95,3 +95,18 @@ class ArticleCreateListView(ListCreateAPIView):
         serializer = ArticleSerializer(article)
 
         return Response(serializer.data, status=201)
+
+
+class ArticleRetrieveUpdate(RetrieveUpdateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    lookup_field = "slug"
+
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+        article = self.get_object()
+
+        if user == article.author:
+            return super().patch(request, *args, **kwargs)
+
+        return Response({"message": "You are not authorized to edit this article"}, status=401)
