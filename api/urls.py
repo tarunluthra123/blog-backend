@@ -8,6 +8,7 @@ from api.views import (
     ArticleCreateListView,
     ArticleRetrieveUpdate,
     CommentListCreateView,
+    CommentDeleteView,
 )
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
     path("articles/", ArticleCreateListView.as_view()),
     path("articles/<slug>", ArticleRetrieveUpdate.as_view()),
     path("articles/<slug>/comments/", CommentListCreateView.as_view()),
+    path("articles/<slug>/comments/<pk>", CommentDeleteView.as_view()),
 ]

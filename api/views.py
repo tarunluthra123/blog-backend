@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 
 from api.models import User, Article, ArticleTag, Comment
@@ -142,3 +142,19 @@ class CommentListCreateView(ListCreateAPIView):
         serializer = self.serializer_class(comment)
 
         return Response(serializer.data, status=201)
+
+
+class CommentDeleteView(DestroyAPIView):
+    queryset = Comment.objects.all()
+    permission_classes = (IsAuthenticated,)
+
+    def delete(self, request, *args, **kwargs):
+        user = request.user
+
+        instance = self.get_object()
+
+        if instance.commenter == user:
+            self.perform_destroy(instance)
+            return Response(status=204)
+        else:
+            return Response({ "message" : "Only the commenter can delete the comment" }, status=400)
