@@ -1,4 +1,4 @@
-from api.models import User, Article, Comment
+from api.models import User, Article, Comment, Like
 from rest_framework import serializers
 
 
@@ -24,6 +24,10 @@ class ArticleTagSerializer(serializers.RelatedField):
 
 class ArticleSerializer(serializers.ModelSerializer):
     tags = ArticleTagSerializer(many=True, read_only=True)
+    likes = serializers.SerializerMethodField()
+
+    def get_likes(self, obj):
+        return Like.objects.filter(article=obj).values_list("user__id", flat=True)
 
     class Meta:
         model = Article
