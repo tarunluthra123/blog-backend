@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 
-from api.models import Like, User, Article, ArticleTag, Comment
+from api.models import Follow, Like, User, Article, ArticleTag, Comment
 from api.serializers import ArticleSerializer, LikeSerializer, UserSerializer, ProfileSerializer, CommentSerializer
 from utils.codec import Codec
 from utils.jwt import generate_token
@@ -184,3 +184,24 @@ class LikeArticleView(APIView):
             return Response(serializer.data, status=201)
         except IntegrityError:
             return Response({"message": "User trying to like the same article"}, status=400)
+
+
+class FollowCreate(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        username = kwargs.get("username")
+        followee = User.objects.get(username=username)
+
+        try:
+            if request.user == followee:
+                raise IntegrityError()
+
+            Follow.objects.create(
+                followee=followee,
+                follower=request.user
+            )
+
+            return Response({"message": f"You are now following {username}" }, status=201)
+        except IntegrityError:
+            return Response({"message": f"Invalid follow relationship"}, status=400)
