@@ -1,4 +1,4 @@
-from api.models import User, Article, Comment, Like
+from api.models import Follow, User, Article, Comment, Like
 from rest_framework import serializers
 
 
@@ -10,10 +10,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    followed_by = serializers.SerializerMethodField()
+    follows = serializers.SerializerMethodField()
+
+    def get_followed_by(self, obj):
+        return obj.followed_by.values_list('follower__username', flat=True)
+
+    def get_follows(self, obj):
+        return obj.follows.values_list('followee__username', flat=True)
+
+
     class Meta:
         model = User
-        fields = ["username", "bio", "profile_pic"]
-
+        fields = ["username", "bio", "profile_pic", "followed_by", "follows"]
 
 
 class ArticleTagSerializer(serializers.RelatedField):

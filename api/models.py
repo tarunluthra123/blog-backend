@@ -1,6 +1,6 @@
 from django.db import models
 from utils.codec import Codec
-from django.db.models.constraints import UniqueConstraint
+from django.db.models.constraints import UniqueConstraint, CheckConstraint, Q, F
 
 
 class User(models.Model):
@@ -77,8 +77,8 @@ class Like(models.Model):
 
 class Follow(models.Model):
     id = models.AutoField(primary_key=True)
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="follower")
-    followee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followee")
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="follows")
+    followee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followed_by")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
