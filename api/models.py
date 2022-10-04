@@ -1,5 +1,6 @@
 from django.db import models
 from utils.codec import Codec
+from django.db.models.constraints import UniqueConstraint
 
 
 class User(models.Model):
@@ -66,3 +67,8 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.user} likes {self.article}"
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['user', 'article'], name='One user should like one article only once')
+        ]

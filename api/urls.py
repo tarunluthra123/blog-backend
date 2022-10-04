@@ -9,6 +9,7 @@ from api.views import (
     ArticleRetrieveUpdate,
     CommentListCreateView,
     CommentDeleteView,
+    LikeArticleView,
 )
 
 urlpatterns = [
@@ -21,4 +22,5 @@ urlpatterns = [
     path("articles/<slug>", ArticleRetrieveUpdate.as_view()),
     path("articles/<slug>/comments/", CommentListCreateView.as_view()),
     path("articles/<slug>/comments/<pk>", CommentDeleteView.as_view()),
+    path("articles/<slug>/like/", LikeArticleView.as_view()),
 ]

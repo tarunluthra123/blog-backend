@@ -3,11 +3,13 @@ from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 
-from api.models import User, Article, ArticleTag, Comment
-from api.serializers import ArticleSerializer, UserSerializer, ProfileSerializer, CommentSerializer
+from api.models import Like, User, Article, ArticleTag, Comment
+from api.serializers import ArticleSerializer, LikeSerializer, UserSerializer, ProfileSerializer, CommentSerializer
 from utils.codec import Codec
 from utils.jwt import generate_token
 from api.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
+from django.db import IntegrityError
 
 
 class PingPongView(APIView):
@@ -158,3 +160,27 @@ class CommentDeleteView(DestroyAPIView):
             return Response(status=204)
         else:
             return Response({ "message" : "Only the commenter can delete the comment" }, status=400)
+
+
+
+class LikeArticleView(APIView):
+    permission_classes = (IsAuthenticated,)
+    
+    def post(self, request, *args, **kwargs):
+        slug = kwargs.get("slug")
+        try:
+            article = Article.objects.get(slug=slug)
+        except Article.DoesNotExist:
+            return Response({"message": "Incorrect slug. Article not found."}, status=400)
+
+        try:
+            obj = Like.objects.create(
+                article=article,
+                user=request.user,
+            )
+
+            serializer = LikeSerializer(obj)
+
+            return Response(serializer.data, status=201)
+        except IntegrityError:
+            return Response({"message": "User trying to like the same article"}, status=400)
