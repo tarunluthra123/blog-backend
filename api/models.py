@@ -72,3 +72,19 @@ class Like(models.Model):
         constraints = [
             UniqueConstraint(fields=['user', 'article'], name='One user should like one article only once')
         ]
+
+
+
+class Follow(models.Model):
+    id = models.AutoField(primary_key=True)
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="follower")
+    followee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followee")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.follower} is following {self.followee}"
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['follower', 'followee'], name='Only one follow per pair')
+        ]
