@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -58,8 +59,16 @@ TEMPLATES = [
 WSGI_APPLICATION = "blog.wsgi.application"
 
 
-DATABASES = {
-    "default": {
+DATABASES = {}
+
+if Config.DB_URL:
+    DATABASES["default"] = dj_database_url.config(
+        default=Config.DB_URL,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+else:
+    DATABASES["default"] = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": Config.DB_NAME,
         "USER": Config.DB_USER,
@@ -67,7 +76,6 @@ DATABASES = {
         "HOST": Config.DB_HOST,
         "PORT": Config.DB_PORT,
     }
-}
 
 
 # Password validation
