@@ -14,3 +14,4 @@ class Config:
     DB_PORT = os.environ.get("DB_PORT", 5432)
 
     JWT_SECRET = os.environ.get("JWT_SECRET", "abcd")
+    RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')

@@ -15,6 +15,10 @@ DEBUG = Config.DEBUG
 
 ALLOWED_HOSTS = Config.ALLOWED_HOSTS
 
+if Config.RENDER_EXTERNAL_HOSTNAME:
+    # This is a Render.com deployment, so we need to add the external hostname to the list of allowed hosts.
+    ALLOWED_HOSTS.append(Config.RENDER_EXTERNAL_HOSTNAME)
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
