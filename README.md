@@ -1,4 +1,10 @@
-# BLOGGING APP
+# Blog App Backend
+Backend server for a blogging application.
+Uses Postgres database with Django Rest Framework. For authentication, it uses JWT tokens.
+This app has been deployed on render.com at https://blog-backend-bpxd.onrender.com
+
+## Postman Collection
+https://www.postman.com/restless-resonance-609196/workspace/my-workspace/collection/16469255-e91288b1-d5a6-4670-98c9-48a5c60b9091?action=share&creator=16469255
 
 ## Problem Statement
 Make a web application for blogging which has built in capabilities to handle various users.
@@ -16,42 +22,6 @@ Make a web application for blogging which has built in capabilities to handle va
 
 ---
 
-## Basic Flow
-### *Subject to changes basis of how you want the overall UX to be*
-1. An initial signup/signin form to create a user profile on the application
-2. A main feed where a user can see cards for various blogs. *Blogs from users which the current user has followed would have a higher priority in the feed*
-3. A page which opens on clicking a blog card which contains the complete contents of the blog
-4. An area to add comments and read other comments about the current blog
-5. An editor where user can create blogs to be posted
-6. An editor where user can edit the already posted blogs
-7. Capability to view another user's profile and follow/unfollow them
+## Schema diagram
 
----
-
-## Expectations from Submission
-### *Points which will be focussed on during evaluation*
-- The code should be working and demonstrable
-- Code should be written in a readable fashion using best practices
-- Code should be optimised on various fronts and hardcoding logic should be avoided
-- Kindly add a proper readme to your project for easy navigation and installation
-- The overall UI should be easy to navigate and have good UX
-
----
-
-## Good to haves (Optional Requirements)
-### *Try to work on these features once all the required features are complete*
-- Having the capability to add blogs to drafts before posting them
-- Having the capability to schedule when a blog would get posted
-- Sending notifications to all users who follow a current user when the current user posts a new blog or makes changes to an existing one
-- Capability to sort feed via time of posting, topics etc.
-- Making UI responsive
-- Ability to club various blogs together under a bucket (topic) -> create a sequence of blogs
-
-
-
-### Postman Workspace JSON Link
-shorturl.at/hijOP
-
-
-### Repository Link
-shorturl.at/ptyMR
+![](blogging-app.drawio.svg)
