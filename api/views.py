@@ -13,7 +13,6 @@ from django.db import IntegrityError
 
 
 class PingPongView(APIView):
-    permission_classes = (IsAuthenticated,)
     def get(self, request):
         return Response({"message": "pingpong"})
 
