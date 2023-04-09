@@ -15,6 +15,9 @@ DEBUG = Config.DEBUG
 
 ALLOWED_HOSTS = Config.ALLOWED_HOSTS
 
+if Config.RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(Config.RENDER_EXTERNAL_HOSTNAME)
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -59,15 +62,22 @@ TEMPLATES = [
 WSGI_APPLICATION = "blog.wsgi.application"
 
 
-DATABASES = {
-    "default": {
+DATABASES = {}
+
+if Config.DB_URL:
+    DATABASES["default"] = dj_database_url.config(
+        default=Config.DB_URL,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+else:
+    DATABASES["default"] = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": Config.DB_NAME,
         "USER": Config.DB_USER,
         "PASSWORD": Config.DB_PASSWORD,
         "HOST": Config.DB_HOST,
     }
-}
 
 
 # Password validation
