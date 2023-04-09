@@ -7,11 +7,11 @@ class Config:
     ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 
     DB_URL = os.environ.get("DB_URL", "postgres://blogger:blogger@localhost:5432/blogger")
-    DB_NAME = os.environ.get("DB_NAME", "blogger")
-    DB_USER = os.environ.get("DB_USER", "blogger")
-    DB_PASSWORD = os.environ.get("DB_PASS", "blogger")
-    DB_HOST = os.environ.get("DB_HOST", "localhost")
-    DB_PORT = os.environ.get("DB_PORT", 5432)
+    DB_NAME = os.environ.get("POSTGRES_DB", "blogger")
+    DB_USER = os.environ.get("POSTGRES_USER", "blogger")
+    DB_PASSWORD = os.environ.get("POSTGRES_PASSWORD", "blogger")
+    DB_HOST = os.environ.get("POSTGRES_HOST", "localhost")
+    DB_PORT = os.environ.get("POSTGRES_PORT", 5432)
 
     JWT_SECRET = os.environ.get("JWT_SECRET", "abcd")
     RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')

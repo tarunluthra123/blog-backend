@@ -15,10 +15,6 @@ DEBUG = Config.DEBUG
 
 ALLOWED_HOSTS = Config.ALLOWED_HOSTS
 
-if Config.RENDER_EXTERNAL_HOSTNAME:
-    # This is a Render.com deployment, so we need to add the external hostname to the list of allowed hosts.
-    ALLOWED_HOSTS.append(Config.RENDER_EXTERNAL_HOSTNAME)
-
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -63,23 +59,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "blog.wsgi.application"
 
 
-DATABASES = {}
-
-if Config.DB_URL:
-    DATABASES["default"] = dj_database_url.config(
-        default=Config.DB_URL,
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
-else:
-    DATABASES["default"] = {
+DATABASES = {
+    "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": Config.DB_NAME,
         "USER": Config.DB_USER,
         "PASSWORD": Config.DB_PASSWORD,
         "HOST": Config.DB_HOST,
-        "PORT": Config.DB_PORT,
     }
+}
 
 
 # Password validation
@@ -123,15 +111,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Following settings only make sense on production and may break development environments.
-if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    # Turn on WhiteNoise storage backend that takes care of compressing static files
-    # and creating unique names for each version so they can safely be cached forever.
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://tarunluthra.in",
+]

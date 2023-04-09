@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+    blog:
+        image: personal/blog
+        env_file:
+            - .env
+        ports:
+            - "8000:8000"
+        build: .
+        depends_on:
+            - postgres
+    postgres:
+        image: postgres:14.7
+        volumes:
+            - ./postgres-data:/var/lib/postgresql/data
+        env_file:
+            - .env

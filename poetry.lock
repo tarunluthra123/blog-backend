@@ -167,14 +167,6 @@ docs = ["furo (>=2022.12.7)", "proselint (>=0.13)", "sphinx-autodoc-typehints (>
 test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest-cov (>=4)", "pytest-mock (>=3.10)", "pytest (>=7.2.2)"]
 
 [[package]]
-name = "psycopg2"
-version = "2.9.6"
-description = "psycopg2 - Python-PostgreSQL Database Adapter"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
 name = "psycopg2-binary"
 version = "2.9.6"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
@@ -261,7 +253,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "1156eed435a30ba88f99534fdb3742c844bc3e1a1c5705ca04a368bd829c6994"
+content-hash = "c09f71d4e1fd7532937a11e83c2e367ca20dd55ecac0510220bc743a4d778c97"
 
 [metadata.files]
 asgiref = []
@@ -278,7 +270,6 @@ packaging = []
 pathspec = []
 pillow = []
 platformdirs = []
-psycopg2 = []
 psycopg2-binary = []
 pyjwt = []
 python-dotenv = []
